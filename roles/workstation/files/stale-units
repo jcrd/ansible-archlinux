@@ -1,0 +1,11 @@
+#!/bin/sh
+
+set -eu
+
+pids="$(lsof -d DEL 2> /dev/null | awk '$8~/\/usr\/lib/ {print $2}')"
+
+if [ -n "$pids" ]; then
+    for u in $(ps -o unit= $pids | sort -u); do
+        echo "● $u"
+    done
+fi

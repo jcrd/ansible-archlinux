@@ -1,0 +1,7 @@
+title Arch Linux ({{ kernel_name }})
+linux /vmlinuz-{{ kernel_name }}
+{% if processor == "intel" %}
+initrd /intel-ucode.img
+{% endif %}
+initrd /initramfs-{{ kernel_name }}.img
+options {{ kernel_params | join(" ") }}

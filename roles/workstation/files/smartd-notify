@@ -1,0 +1,8 @@
+#!/bin/sh
+
+if ! command -v notify-send; then
+    echo 'notify-send not found' >&2
+    exit 1
+fi
+
+dbus-run notify-send "S.M.A.R.T. Error ($SMARTD_FAILTYPE)" "$SMARTD_MESSAGE"

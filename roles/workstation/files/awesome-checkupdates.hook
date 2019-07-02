@@ -1,0 +1,10 @@
+[Trigger]
+Operation = Upgrade
+Type = Package
+Target = *
+
+[Action]
+Description = Refreshing checkupdates widget...
+Depends = awesome
+When = PostTransaction
+Exec = /etc/pacman.d/scripts/dbus-user-run awesome-client 'hook.run("checkupdates")'

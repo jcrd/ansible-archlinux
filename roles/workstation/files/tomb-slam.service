@@ -1,0 +1,10 @@
+[Unit]
+Description=Slam open tombs
+Before=sleep.target shutdown.target
+
+[Service]
+Type=oneshot
+ExecStart=/usr/bin/tomb slam
+
+[Install]
+WantedBy=sleep.target shutdown.target
