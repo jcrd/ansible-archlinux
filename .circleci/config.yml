@@ -1,0 +1,8 @@
+version: 2
+jobs:
+  build:
+    docker:
+      - image: supplantr/ansible-archlinux:1.0
+    steps:
+      - checkout
+      - run: make container
