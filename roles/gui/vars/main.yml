@@ -1,0 +1,44 @@
+# List of graphics driver types to install.
+# Options: intel, nouveau
+graphics_drivers: intel
+
+# List of input drivers to install.
+input_drivers:
+  - xf86-input-wacom
+
+# used by qutebrowser
+dictionary: en-US
+
+gui_packages:
+  - chromium
+  - compton
+  - d-feet
+  - gcolor2
+  - gtk-engines
+  - i3lock
+  - kitty
+  - libva-utils
+  - lxappearance
+  - maim
+  - mpv
+  - mupdf
+  - qutebrowser
+  - virt-manager
+  - xcape
+  - xcursor-neutral
+
+firejail_symlinks:
+  - qutebrowser
+  - chromium
+
+# List of font packages to install.
+font_packages:
+  - noto-fonts
+  - noto-fonts-cjk
+  - ttf-croscore
+  - ttf-dejavu
+  - ttf-fira-code
+  - ttf-roboto
+
+custom_units:
+  - tomb-slam.service

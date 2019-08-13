@@ -1,0 +1,29 @@
+# Configure pacman repos.
+- name: Create local repo directories
+  file:
+    path: /var/cache/pacman/{{ item }}
+    state: directory
+    group: "{{ username }}"
+    mode: 0775
+  loop: "{{ local_repos }}"
+
+- name: Create local repo databases
+  command: repo-add /var/cache/pacman/{{ item }}/{{ item }}.db.tar
+  args:
+    creates: /var/cache/pacman/{{ item }}/{{ item }}.db.tar
+  loop: "{{ local_repos }}"
+  become: yes
+  become_user: "{{ username }}"
+
+- name: Configure local repos
+  template: src=repo.j2 dest=/etc/pacman.d/{{ item }}
+  vars:
+    repo: "{{ item }}"
+  loop: "{{ local_repos }}"
+
+- name: Configure pacman
+  template: src=pacman.conf.j2 dest=/etc/pacman.conf
+
+- name: Update pacman cache
+  pacman: update_cache=yes
+  tags: packages

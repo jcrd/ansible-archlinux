@@ -1,0 +1,17 @@
+- name: Install etckeeper
+  pacman: name=etckeeper
+  tags: packages
+
+- name: Initialize etckeeper
+  command: etckeeper init
+  args:
+    creates: /etc/.git
+  tags: packages
+
+- name: Configure etckeeper git repo
+  git_config:
+    scope: local
+    repo: /etc
+    name: commit.gpgsign
+    value: false
+  tags: packages

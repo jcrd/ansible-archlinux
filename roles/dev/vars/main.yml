@@ -1,0 +1,36 @@
+dev_packages:
+  - android-tools
+  - android-udev
+  - ansible-lint
+  - bash-language-server
+  - ccache
+  - clang
+  - docker
+  - gdb
+  - libvirt
+  - meson
+  - pigz
+  - python-black
+  - python-language-server
+  - python-pipenv
+  - python-neovim
+  - qemu
+  - shellcheck
+  - strace
+  - tokei
+  - valgrind
+  - vint
+  - asp
+  - devtools
+  - namcap
+
+# List of groups created by packages the user should belong to.
+dev_package_groups:
+  - docker
+  - libvirt
+  - adbusers
+
+# List of systemd units to enable.
+dev_package_units:
+  - docker.socket
+  - virtlogd.socket

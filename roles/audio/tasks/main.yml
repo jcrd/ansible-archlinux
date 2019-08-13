@@ -1,0 +1,17 @@
+- name: Install pulseaudio
+  pacman: name={{ item }}
+  loop:
+    - pulseaudio
+    - pulseaudio-alsa
+  tags: packages
+
+- name: Install pulseaudio-bluetooth
+  pacman: name=pulseaudio-bluetooth
+  when: bluetooth is defined
+  tags: packages
+
+- name: Enable pulseaudio service
+  service: name=pulseaudio.service scope=user enabled=yes
+  tags:
+    - packages
+    - dbus

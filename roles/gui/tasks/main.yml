@@ -1,0 +1,100 @@
+- name: Install xorg packages
+  pacman: name={{ item }}
+  loop:
+    - xorg-server
+    - xorg-server-xephyr
+    - xorg-setxkbmap
+    - xorg-xdpyinfo
+    - xorg-xev
+    - xorg-xinput
+    - xorg-xprop
+    - xorg-xrandr
+    - xorg-xsetroot
+    - xorg-xwininfo
+  tags: packages
+
+- name: Install intel graphics drivers
+  block:
+    - name: Install libva-intel-driver
+      pacman: name=libva-intel-driver
+    - name: Add i915 module to mkinitcpio
+      lineinfile:
+        path: /etc/mkinitcpio.conf
+        regexp: "^MODULES=()"
+        line: "MODULES=(i915)"
+      notify: mkinitcpio
+  when: "'intel' in graphics_drivers"
+  tags: packages
+
+- name: Install nouveau graphics drivers
+  pacman:
+    name:
+      - xf86-video-nouveau
+      - libva-mesa-driver
+  when: "'nouveau' in graphics_drivers"
+  tags: packages
+
+- name: Install input drivers
+  pacman: name={{ item }}
+  loop: "{{ input_drivers }}"
+  tags: packages
+
+- name: Install GUI packages
+  pacman: name={{ item }}
+  loop: "{{ gui_packages }}"
+  tags: packages
+
+- name: Install qutebrowser spellcheck dictionary
+  command: /usr/share/qutebrowser/scripts/dictcli.py install {{ dictionary }}
+  when: "'qutebrowser' in packages"
+  tags: packages
+
+- name: Create firejail symlinks
+  file:
+    src: /usr/bin/firejail
+    dest: /usr/local/bin/{{ item }}
+    state: link
+  loop: "{{ firejail_symlinks }}"
+  tags: packages
+
+- name: Install lightdm
+  pacman: name=lightdm
+  tags: packages
+
+- name: Configure lightdm
+  copy:
+    src: lightdm.conf
+    dest: /etc/lightdm/lightdm.conf
+  tags: packages
+
+- name: Configure greeter
+  template:
+    src: lightdm-mini-greeter.conf.j2
+    dest: /etc/lightdm/lightdm-mini-greeter.conf
+  tags: packages
+
+- name: Enable lightdm service
+  service: name=lightdm.service enabled=yes
+  tags: packages
+
+- name: Configure preferred fonts
+  copy: src=local.conf dest=/etc/fonts
+
+- name: Configure font rendering
+  file:
+    src: /etc/fonts/conf.avail/{{ item }}
+    dest: /etc/fonts/conf.d/{{ item }}
+    state: link
+  loop:
+    - 10-sub-pixel-rgb.conf
+    - 11-lcdfilter-default.conf
+  tags: packages
+
+- name: Install custom systemd units
+  copy: src={{ item }} dest=/etc/systemd/system
+  loop: "{{ custom_units }}"
+
+- name: Enable custom systemd units
+  service: name={{ item }} enabled=yes
+  loop: "{{ custom_units }}"
+  tags: dbus

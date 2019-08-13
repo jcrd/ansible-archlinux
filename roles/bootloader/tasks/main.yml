@@ -1,0 +1,31 @@
+- name: Install intel microcode updates
+  pacman: name=intel-ucode
+  when: microcode == "intel"
+  tags: packages
+
+- name: Set up systemd-boot for UEFI
+  block:
+    - name: Install systemd-boot to ESP
+      command: bootctl --path={{ esp_mount }} install
+    - name: Add systemd-boot entries
+      template:
+        src: entry.conf.j2
+        dest: "{{ esp_mount }}/loader/entries/{{ item }}.conf"
+      vars:
+        kernel_name: "{{ item }}"
+      loop: "{{ kernels }}"
+    - name: Install systemd-boot pacman hook
+      copy: src=systemd-boot.hook dest=/etc/pacman.d/hooks
+  when: firmware == "UEFI"
+
+- name: Set up grub for BIOS
+  block:
+    - name: Install grub
+      pacman: name=grub
+    - name: Install grub to MBR
+      command: grub-install --target=i386-pc {{ mbr_device }}
+    - name: Configure grub
+      template: src=grub.j2 dest=/etc/default/grub
+      notify: grub-mkconfig
+  when: firmware == "BIOS"
+  tags: packages

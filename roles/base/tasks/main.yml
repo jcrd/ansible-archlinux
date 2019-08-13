@@ -1,0 +1,158 @@
+# Set up mirrorlist.
+- name: Install reflector
+  pacman: name=reflector
+  tags: packages
+
+- name: Remove mirrorlist if not created with reflector
+  shell: |
+    grep '# With:[[:space:]]*reflector' /etc/pacman.d/mirrorlist || \
+    rm /etc/pacman.d/mirrorlist
+  args:
+    removes: /etc/pacman.d/mirrorlist
+  tags: packages
+
+- name: Update mirrorlist with reflector script
+  script: update-mirrorlist.sh
+  args:
+    creates: /etc/pacman.d/mirrorlist
+  tags: packages
+
+- name: Update pacman cache
+  pacman: update_cache=yes upgrade=yes
+  tags: packages
+
+- name: Install base packages
+  pacman: name="{{ base_packages }}"
+  tags: packages
+
+- name: Install kernels
+  pacman: name={{ kernels | difference(["linux"]) }}
+  tags: packages
+
+- name: Uninstall default kernel
+  pacman: name=linux state=absent
+  when: "'linux' not in kernels"
+  tags: packages
+
+
+# User.
+- name: Create user {{ username }}
+  user:
+    name: "{{ username }}"
+    groups: "{{ ['wheel'] }}"
+    append: yes
+
+- name: Set {{ username }} shell
+  user:
+    name: "{{ username }}"
+    shell: /usr/bin/zsh
+  tags: packages
+
+- name: Configure sudo
+  copy:
+    content: "{{ item.line }}\n"
+    dest: /etc/sudoers.d/{{ item.file }}
+    mode: 0440
+    validate: visudo -cf %s
+  loop:
+    - { file: env_keep, line: 'Defaults env_keep += "HOME"' }
+    - { file: wheel, line: '%wheel ALL=(ALL) NOPASSWD: ALL' }
+
+- name: Configure polkit
+  copy:
+    src: 49-nopasswd-wheel.rules
+    dest: /etc/polkit-1/rules.d
+  tags: packages
+
+
+# Configure kernel.
+- name: Blacklist kernel modules
+  kernel_blacklist: name={{ item }}
+  loop: "{{ kernel_blacklist }}"
+
+- name: Configure kernel sysctl
+  sysctl:
+    name: kernel.{{ item.name }}
+    value: "{{ item.value }}"
+    sysctl_file: /etc/sysctl.d/kernel.conf
+  loop: "{{ kernel_sysctl }}"
+  when: not container
+
+- name: Set I/O schedulers
+  copy: src=60-io_schedulers.rules dest=/etc/udev/rules.d
+
+
+# Network.
+- name: Create systemd-resolved resolv.conf symlink
+  file:
+    src: /run/systemd/resolve/stub-resolv.conf
+    dest: /etc/resolv.conf
+    state: link
+    force: yes
+  when: not container
+
+
+# Configure systemd.
+- name: Create journald conf directory
+  file: path=/etc/systemd/journald.conf.d state=directory
+
+- name: Configure journald
+  copy: src=00-journald.conf dest=/etc/systemd/journald.conf.d
+
+- name: Create logind conf directory
+  file: path=/etc/systemd/logind.conf.d state=directory
+
+- name: Configure logind
+  copy: src=00-logind.conf dest=/etc/systemd/logind.conf.d
+
+- name: Enable systemd units
+  service: name={{ item }} enabled=yes
+  loop:
+    - NetworkManager.service
+    - dbus-broker.service
+    - firewalld.service
+    - irqbalance.service
+    - rngd.service
+    - smartd.service
+    - systemd-resolved.service
+  tags:
+    - packages
+    - dbus
+
+- name: Enable dbus-broker service globally
+  service: name=dbus-broker.service scope=global enabled=yes
+  tags:
+    - packages
+    - dbus
+
+# Configure system.
+- name: Generate locale
+  locale_gen: name={{ locale }}
+
+- name: Set LANG in /etc/locale.conf
+  copy:
+    content: "LANG={{ locale }}\n"
+    dest: /etc/locale.conf
+
+- name: Set timezone to {{ timezone }}
+  file:
+    src: /usr/share/zoneinfo/{{ timezone }}
+    dest: /etc/localtime
+
+- name: Generate /etc/adjtime
+  command: hwclock --systohc
+  args:
+    creates: /etc/adjtime
+# Can't interact with hardware clock in docker.
+  when: not container
+
+- name: Set hostname
+  copy:
+    content: "{{ hostname }}\n"
+    dest: /etc/hostname
+# Can't set hostname in docker.
+  when: not container
+
+- name: Populate /etc/hosts
+  template: src=hosts.j2 dest=/etc/hosts
+  when: not container

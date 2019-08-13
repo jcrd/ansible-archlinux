@@ -1,0 +1,12 @@
+- name: Install bluetooth packages
+  pacman: name={{ item }}
+  loop:
+    - bluez
+    - bluez-utils
+  tags: packages
+
+- name: Enable bluetooth service
+  service: name=bluetooth.service enabled=yes
+  tags:
+    - packages
+    - dbus

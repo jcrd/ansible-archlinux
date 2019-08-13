@@ -1,0 +1,7 @@
+- name: mkinitcpio
+  command: mkinitcpio -P
+  when: not container
+
+- name: fc-cache
+  command: fc-cache -f
+  when: not container

@@ -1,8 +1,0 @@
-#!/bin/sh
-
-USER={{ username }}
-
-/usr/bin/systemd-run \
-    --uid="$USER" --scope \
-    -E DBUS_SESSION_BUS_ADDRESS=unix:path=/run/user/"$(id -u "$USER")"/bus \
-    -- "$@" 2> /dev/null

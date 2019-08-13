@@ -1,0 +1,51 @@
+- name: Install dev packages
+  pacman: name={{ item }}
+  loop: "{{ dev_packages }}"
+  tags: packages
+
+- name: Add {{ username }} to dev groups
+  user:
+    name: "{{ username }}"
+    groups: "{{ dev_package_groups }}"
+    append: yes
+  tags: packages
+
+- name: Configure firewalld for docker
+  firewalld:
+    zone: trusted
+    interface: docker0
+    state: enabled
+    permanent: yes
+  when: "'docker' in packages"
+  tags:
+    - packages
+    - dbus
+
+- name: Configure firewalld for libvirt
+  lineinfile:
+    path: /etc/firewalld/firewalld.conf
+    regexp: "^FirewallBackend=nftables"
+    line: "FirewallBackend=iptables"
+  tags:
+    - packages
+
+- name: Enable systemd dev package units
+  service: name={{ item }} enabled=yes
+  loop: "{{ dev_package_units }}"
+  tags:
+    - packages
+    - dbus
+
+- name: Configure makepkg
+  copy: src=makepkg.conf dest=/etc/makepkg.conf
+
+- name: Check pacman cache directory
+  stat: path=/var/cache/pacman/pkg
+  register: pacman_cache
+
+- name: Configure pacman cache directory
+  file:
+    path: /var/cache/pacman/pkg
+    group: "{{ username }}"
+    mode: 0775
+  when: pacman_cache.stat.exists and pacman_cache.stat.isdir

@@ -7,10 +7,10 @@ baremetal: lint
 
 # Test basic configuration, without installing packages.
 container: lint
-	ansible-playbook --skip-tags packages,dbus workstation.yml
+	ansible-playbook --skip-tags packages,dbus container.yml
 
 # Test full install, without interacting with dbus (i.e. systemctl, etc).
 container-all: lint
-	ansible-playbook --skip-tags dbus workstation.yml
+	ansible-playbook --skip-tags dbus container.yml
 
 .PHONY: lint container container-all

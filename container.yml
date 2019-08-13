@@ -3,9 +3,9 @@
   gather_facts: no
   vars:
     bluetooth: true
+    container: true
   roles:
     - base
-    - bootloader
     - audio
     - bluetooth
     - gui
@@ -13,6 +13,5 @@
     - repos
     - flatpak
     - etckeeper
-    - mandb
 
 # vim: ft=yaml.ansible

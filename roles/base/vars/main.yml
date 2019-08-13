@@ -1,0 +1,67 @@
+# System configuration.
+hostname: arch
+locale: en_US.UTF-8
+timezone: America/Denver
+# used by reflector
+country: 'United States'
+
+# List of kernels to install.
+# If 'linux' is not present, it will be uninstalled.
+kernels:
+  - linux-zen
+  - linux-lts
+
+base_packages:
+  - abduco
+  - acpi
+  - atool
+  - colordiff
+  - dbus-broker
+  - dmidecode
+  - dnsmasq
+  - ethtool
+  - exa
+  - expac
+  - firewalld
+  - fzf
+  - hdparm
+  - htop
+  - hwinfo
+  - iotop
+  - irqbalance
+  - lm_sensors
+  - lm_sensors
+  - lsof
+  - mediainfo
+  - mosh
+  - ncdu
+  - neovim
+  - networkmanager
+  - openssh
+  - pacman-contrib
+  - pacutils
+  - powertop
+  - progress
+  - ps_mem
+  - ranger
+  - rlwrap
+  - rng-tools
+  - smartmontools
+  - sudo
+  - sysstat
+  - tmux
+  - wget
+  - wireless_tools
+  - zsh
+  - zsh-completions
+
+kernel_blacklist:
+  # Speaker beep.
+  - pcspkr
+  # Watchdog.
+  - iTCO_wdt
+
+# See https://www.kernel.org/doc/html/latest/admin-guide/kernel-parameters.html
+kernel_sysctl:
+  # Wait 5 seconds before rebooting on panic.
+  - { name: panic, value: 5 }

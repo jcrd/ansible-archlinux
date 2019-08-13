@@ -1,0 +1,5 @@
+# List of local pacman repos to set up.
+local_repos:
+  - aur
+  - aur-vcs
+  - usr

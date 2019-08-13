@@ -1,0 +1,12 @@
+# Bootloader configuration.
+kernel_params:
+  - quiet
+  - nowatchdog
+firmware: "UEFI"
+# Used by systemd-boot (UEFI).
+esp_mount: /boot
+# Used by grub (BIOS).
+mbr_device: /dev/sda
+
+# Options: intel
+microcode: intel
