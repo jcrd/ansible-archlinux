@@ -2,7 +2,7 @@ FROM archlinux/base
 
 ENV CONTAINER docker
 
-COPY roles/workstation/files/update-mirrorlist.sh /usr/local/bin/
+COPY roles/base/files/update-mirrorlist.sh /usr/local/bin/
 
 RUN pacman -Sy --noconfirm reflector
 RUN update-mirrorlist.sh
