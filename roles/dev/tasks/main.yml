@@ -10,17 +10,6 @@
     append: yes
   tags: packages
 
-- name: Configure firewalld for docker
-  firewalld:
-    zone: trusted
-    interface: docker0
-    state: enabled
-    permanent: yes
-  when: "'docker' in packages"
-  tags:
-    - packages
-    - dbus
-
 - name: Configure firewalld for libvirt
   lineinfile:
     path: /etc/firewalld/firewalld.conf

@@ -1,0 +1,20 @@
+- name: Install docker
+  package: name=docker
+  tags: packages
+
+- name: Configure firewalld for docker
+  firewalld:
+    zone: trusted
+    interface: docker0
+    state: enabled
+    permanent: yes
+  tags:
+    - packages
+    - dbus
+
+- name: Add {{ username }} to docker group
+  user:
+    name: "{{ username }}"
+    groups: docker
+    append: yes
+  tags: packages

@@ -5,7 +5,6 @@ dev_packages:
   - bash-language-server
   - ccache
   - clang
-  - docker
   - gdb
   - libvirt
   - meson
@@ -26,7 +25,6 @@ dev_packages:
 
 # List of groups created by packages the user should belong to.
 dev_package_groups:
-  - docker
   - libvirt
   - adbusers
 
