@@ -13,4 +13,9 @@ container: lint
 container-all: lint
 	ansible-playbook --skip-tags dbus container.yml
 
-.PHONY: lint container container-all
+# Run container target in docker.
+test:
+	docker run --rm -v $(shell pwd):/ansible -w /ansible \
+		supplantr/ansible-archlinux:latest make container
+
+.PHONY: lint container container-all test
