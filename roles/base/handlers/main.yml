@@ -2,4 +2,4 @@
   command: sensors-detect --auto
   args:
     creates: /etc/conf.d/lm_sensors
-  when: not container
+  when: container is not defined

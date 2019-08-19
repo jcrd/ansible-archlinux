@@ -76,7 +76,7 @@
     value: "{{ item.value }}"
     sysctl_file: /etc/sysctl.d/kernel.conf
   loop: "{{ kernel_sysctl }}"
-  when: not container
+  when: container is not defined
 
 - name: Set I/O schedulers
   copy: src=60-io_schedulers.rules dest=/etc/udev/rules.d
@@ -89,7 +89,7 @@
     dest: /etc/resolv.conf
     state: link
     force: yes
-  when: not container
+  when: container is not defined
 
 
 # Configure systemd.
@@ -144,15 +144,15 @@
   args:
     creates: /etc/adjtime
 # Can't interact with hardware clock in docker.
-  when: not container
+  when: container is not defined
 
 - name: Set hostname
   copy:
     content: "{{ hostname }}\n"
     dest: /etc/hostname
 # Can't set hostname in docker.
-  when: not container
+  when: container is not defined
 
 - name: Populate /etc/hosts
   template: src=hosts.j2 dest=/etc/hosts
-  when: not container
+  when: container is not defined
