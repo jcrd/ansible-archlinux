@@ -23,7 +23,7 @@ base_packages:
   - exa
   - expac
   - firewalld
-  - fzf
+  - fzy
   - hdparm
   - htop
   - hwinfo
