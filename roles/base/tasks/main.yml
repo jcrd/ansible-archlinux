@@ -88,6 +88,7 @@
     src: /run/systemd/resolve/stub-resolv.conf
     dest: /etc/resolv.conf
     state: link
+    follow: no
     force: yes
   when: container is not defined
 
