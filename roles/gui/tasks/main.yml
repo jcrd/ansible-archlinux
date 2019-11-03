@@ -57,6 +57,7 @@
     dest: /usr/local/bin/{{ item }}
     state: link
   loop: "{{ firejail_symlinks }}"
+  when: "'firejail' in gui_packages"
   tags: packages
 
 - name: Install lightdm

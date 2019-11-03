@@ -13,6 +13,7 @@ gui_packages:
   - chromium
   - compton
   - d-feet
+  - firejail
   - gcolor2
   - gtk-engines
   - i3lock
