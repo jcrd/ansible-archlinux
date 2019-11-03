@@ -46,7 +46,9 @@
 
 - name: Install qutebrowser spellcheck dictionary
   command: /usr/share/qutebrowser/scripts/dictcli.py install {{ dictionary }}
-  when: "'qutebrowser' in packages"
+  become: true
+  become_user: "{{ username }}"
+  when: "'qutebrowser' in gui_packages"
   tags: packages
 
 - name: Create firejail symlinks
