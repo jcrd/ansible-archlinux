@@ -80,6 +80,12 @@
   service: name=lightdm.service enabled=yes
   tags: packages
 
+- name: Install font packages
+  pacman: name={{ item }}
+  loop: "{{ font_packages }}"
+  notify: fc-cache
+  tags: packages
+
 - name: Configure preferred fonts
   copy: src=local.conf dest=/etc/fonts
 
