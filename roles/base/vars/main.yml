@@ -30,7 +30,6 @@ base_packages:
   - iotop
   - irqbalance
   - lm_sensors
-  - lm_sensors
   - lsof
   - mediainfo
   - mosh
