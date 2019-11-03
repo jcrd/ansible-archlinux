@@ -35,11 +35,8 @@ firejail_symlinks:
 
 # List of font packages to install.
 font_packages:
-  - noto-fonts
-  - noto-fonts-cjk
   - ttf-croscore
   - ttf-dejavu
-  - ttf-fira-code
   - ttf-roboto
 
 custom_units:
