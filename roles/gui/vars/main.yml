@@ -24,6 +24,8 @@ gui_packages:
   - mpv
   - mupdf
   - pdfjs
+  # Required by kitty for image support.
+  - python-pillow
   - qutebrowser
   - virt-manager
   - xcape
