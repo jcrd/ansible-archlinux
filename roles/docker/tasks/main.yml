@@ -18,3 +18,9 @@
     groups: docker
     append: yes
   tags: packages
+
+- name: Enable docker.socket
+  service: name=docker.socket enabled=yes
+  tags:
+    - packages
+    - dbus

@@ -29,5 +29,4 @@ dev_package_groups:
 
 # List of systemd units to enable.
 dev_package_units:
-  - docker.socket
   - virtlogd.socket
