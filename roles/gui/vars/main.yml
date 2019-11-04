@@ -27,6 +27,7 @@ gui_packages:
   # Required by kitty for image support.
   - python-pillow
   - qutebrowser
+  - sxiv
   - virt-manager
   - xcape
   - xcursor-neutral
