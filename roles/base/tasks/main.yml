@@ -34,6 +34,15 @@
   when: "'linux' not in kernels"
   tags: packages
 
+- name: Symlink nvim to vim
+  file:
+    src: /usr/bin/nvim
+    dest: /usr/local/bin/vim
+    state: link
+    follow: no
+    force: yes
+  when: "'neovim' in base_packages"
+
 
 # User.
 - name: Create user {{ username }}
