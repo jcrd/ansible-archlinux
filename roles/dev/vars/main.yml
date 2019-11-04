@@ -6,7 +6,6 @@ dev_packages:
   - ccache
   - clang
   - gdb
-  - libvirt
   - meson
   - pigz
   - python-black
