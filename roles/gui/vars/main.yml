@@ -13,6 +13,7 @@ gui_packages:
   - chromium
   - compton
   - d-feet
+  - ffmpegthumbnailer
   - firejail
   - gcolor2
   - gtk-engines
