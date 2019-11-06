@@ -8,6 +8,7 @@ dev_packages:
   - clang
   - devtools
   - gdb
+  - man-pages
   - meson
   - namcap
   - pigz
