@@ -2,25 +2,25 @@ dev_packages:
   - android-tools
   - android-udev
   - ansible-lint
+  - asp
   - bash-language-server
   - ccache
   - clang
+  - devtools
   - gdb
   - meson
+  - namcap
   - pigz
   - python-black
   - python-language-server
-  - python-pipenv
   - python-neovim
+  - python-pipenv
   - qemu
   - shellcheck
   - strace
   - tokei
   - valgrind
   - vint
-  - asp
-  - devtools
-  - namcap
 
 # List of groups created by packages the user should belong to.
 dev_package_groups:
