@@ -10,7 +10,7 @@
     - bluetooth
     - gui
     - dev
-    - docker
+    - podman
     - repos
     - flatpak
     - etckeeper

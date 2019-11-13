@@ -1,0 +1,13 @@
+- name: Install podman
+  package: name=podman
+  tags: packages
+
+- name: Set up podman
+  copy:
+    content: "{{ username }}:100000:65536\n"
+    dest: /etc/{{ item }}
+  loop:
+    - subuid
+    - subgid
+  notify: podman system migrate
+  tags: packages
