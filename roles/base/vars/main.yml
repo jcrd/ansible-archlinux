@@ -5,6 +5,10 @@ timezone: America/Denver
 # used by reflector
 country: 'United States'
 
+user_groups:
+  - wheel
+  - uucp
+
 # List of kernels to install.
 # If 'linux' is not present, it will be uninstalled.
 kernels:

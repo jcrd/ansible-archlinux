@@ -48,7 +48,7 @@
 - name: Create user {{ username }}
   user:
     name: "{{ username }}"
-    groups: "{{ ['wheel'] }}"
+    groups: "{{ user_groups }}"
     append: yes
 
 - name: Set {{ username }} shell
